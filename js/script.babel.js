@@ -74,6 +74,7 @@ class Glitch {
     }
 
     replaceData(destImg, srcPixels) {
+
         for (let y = 0; y < destImg.height; y++) {
             for (let x = 0; x < destImg.width; x++) {
                 let r, g, b, a;
@@ -221,7 +222,7 @@ class Glitch {
             this.throughFlag = false;
             setTimeout(() => {
                 this.throughFlag = true;
-            }, floor(random(40, 400)));
+            }, floor(random(200, 400)));
         }
         if (!this.throughFlag) {
             push();
@@ -232,32 +233,54 @@ class Glitch {
         }
 
         // flow line
-        this.flowLineImgs.forEach((v, i, arr) => {
-            arr[i].pixels = this.flowLine(this.imgOrigin, v);
-            if (arr[i].pixels) {
-                this.replaceData(this.imgOrigin, arr[i].pixels);
-            }
-        })
+        n = floor(random(glichFactor));
+        if (n > 75 && this.throughFlag) {
+            this.flowLineImgs.forEach((v, i, arr) => {
+                arr[i].pixels = this.flowLine(this.imgOrigin, v);
+                if (arr[i].pixels) {
+                    this.replaceData(this.imgOrigin, arr[i].pixels);
+                }
+            })
+        }else{
+            setTimeout(() => {
+                this.throughFlag = true;
+            }, floor(random(200, 800)));
+        }
 
         // shift line
-        this.shiftLineImgs.forEach((v, i, arr) => {
-            if (floor(random(100)) > 50) {
-                arr[i] = this.shiftLine(this.imgOrigin);
-                this.replaceData(this.imgOrigin, arr[i]);
-            } else {
-                if (arr[i]) {
+        n = floor(random(glichFactor));
+        if (n > 75 && this.throughFlag) {
+            this.shiftLineImgs.forEach((v, i, arr) => {
+                if (floor(random(100)) > 50) {
+                    arr[i] = this.shiftLine(this.imgOrigin);
                     this.replaceData(this.imgOrigin, arr[i]);
+                } else {
+                    if (arr[i]) {
+                        this.replaceData(this.imgOrigin, arr[i]);
+                    }
                 }
-            }
-        })
+            })
+        } else{
+            setTimeout(() => {
+                this.throughFlag = true;
+            }, floor(random(200, 800)));
+        }
 
         // shift rgb
-        this.shiftRGBs.forEach((v, i, arr) => {
-            if (floor(random(100)) > 65) {
-                arr[i] = this.shiftRGB(this.imgOrigin);
-                this.replaceData(this.imgOrigin, arr[i]);
-            }
-        })
+        n = floor(random(glichFactor));
+        if (n > 75 && this.throughFlag) {
+            this.shiftRGBs.forEach((v, i, arr) => {
+                if (floor(random(100)) > 65) {
+                    arr[i] = this.shiftRGB(this.imgOrigin);
+                    this.replaceData(this.imgOrigin, arr[i]);
+                }
+            })
+
+        } else {
+            setTimeout(() => {
+                this.throughFlag = true;
+            }, floor(random(200, 800)));
+        }
 
         push();
         translate((width - this.imgOrigin.width) / 2, (height - this.imgOrigin.height) / 2);
@@ -265,20 +288,27 @@ class Glitch {
         pop();
 
         // scat image
-        this.scatImgs.forEach((obj) => {
-            push();
-            translate((width - this.imgOrigin.width) / 2, (height - this.imgOrigin.height) / 2);
-            if (floor(random(100)) > 80) {
-                obj.x = floor(random(-this.imgOrigin.width * 0.3, this.imgOrigin.width * 0.7));
-                obj.y = floor(random(-this.imgOrigin.height * 0.1, this.imgOrigin.height));
-                obj.img = this.getRandomRectImg(this.imgOrigin);
-            }
-            if (obj.img) {
-                image(obj.img, obj.x, obj.y);
-            }
-            pop();
-        })
+        n = floor(random(glichFactor));
+        if (n > 75 && this.throughFlag) {
+            this.scatImgs.forEach((obj) => {
+                push();
+                translate((width - this.imgOrigin.width) / 2, (height - this.imgOrigin.height) / 2);
+                if (floor(random(100)) > 80) {
+                    obj.x = floor(random(-this.imgOrigin.width * 0.3, this.imgOrigin.width * 0.7));
+                    obj.y = floor(random(-this.imgOrigin.height * 0.1, this.imgOrigin.height));
+                    obj.img = this.getRandomRectImg(this.imgOrigin);
+                }
+                if (obj.img) {
+                    image(obj.img, obj.x, obj.y);
+                }
+                pop();
+            })
 
+        } else {
+            setTimeout(() => {
+                this.throughFlag = true;
+            }, floor(random(200, 800)));
+        }
     }
 
 }
